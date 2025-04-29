@@ -1,0 +1,334 @@
+<div class="container">
+  <h2>Booking Form</h2>
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+    <!-- Type Selection -->
+    <div class="form-group">
+      <label for="type">Type:</label>
+      <select id="type" formControlName="type" (change)="onTypeChange()" class="form-control">
+        <option value="flight">Flight</option>
+        <option value="hotel">Hotel</option>
+        <option value="holiday">Holiday</option>
+        <option value="rental">Rental</option>
+      </select>
+    </div>
+
+    <!-- Personal Details -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input id="name" formControlName="name" type="text" class="form-control" />
+        <div *ngIf="bookingForm.get('name')?.invalid && bookingForm.get('name')?.touched" class="error-message">
+          Name is required (min 3 characters)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email" class="form-control" />
+        <div *ngIf="bookingForm.get('email')?.invalid && bookingForm.get('email')?.touched" class="error-message">
+          Valid email is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input id="phone" formControlName="phone" type="text" class="form-control" />
+        <div *ngIf="bookingForm.get('phone')?.invalid && bookingForm.get('phone')?.touched" class="error-message">
+          10 digit phone number is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <input id="dob" formControlName="dob" type="date" class="form-control" />
+        <div *ngIf="bookingForm.get('dob')?.invalid && bookingForm.get('dob')?.touched" class="error-message">
+          Date of birth is required
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Field -->
+    <div class="form-group">
+      <label for="status">Status:</label>
+      <select id="status" formControlName="status" class="form-control">
+        <option value="confirmed">Confirmed</option>
+        <option value="waiting">Waiting</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <!-- Country Field (Common for flight, hotel, holiday) -->
+    <div class="form-group">
+      <label for="country">Country:</label>
+      <select id="country" formControlName="country" (change)="updateStates()" class="form-control">
+        <option value="">-- Select Country --</option>
+        <option *ngFor="let country of countries" [value]="country">{{ country }}</option>
+      </select>
+    </div>
+
+    <!-- Flight Fields -->
+    <ng-container *ngIf="selectedType === 'flight'">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="state">State:</label>
+          <select id="state" formControlName="state" (change)="updateStations()" class="form-control" [disabled]="!bookingForm.get('country')?.value">
+            <option value="">-- Select State --</option>
+            <option *ngFor="let state of availableStates" [value]="state">{{ state }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="station">Flight Station:</label>
+          <select id="station" formControlName="station" class="form-control" [disabled]="!bookingForm.get('state')?.value">
+            <option value="">-- Select Station --</option>
+            <option *ngFor="let station of availableStations" [value]="station">{{ station }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="flightClass">Flight Class:</label>
+          <select id="flightClass" formControlName="flightClass" (change)="updatePrice()" class="form-control">
+            <option value="">-- Select Class --</option>
+            <option value="economy">Economy</option>
+            <option value="business">Business</option>
+            <option value="first">First Class</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="ticketPrice">Ticket Price:</label>
+          <input id="ticketPrice" type="text" [value]="ticketPrice" readonly class="form-control" />
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Hotel Fields -->
+    <ng-container *ngIf="selectedType === 'hotel'">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="state">State/City:</label>
+          <select id="state" formControlName="state" (change)="updateHotels()" class="form-control" [disabled]="!bookingForm.get('country')?.value">
+            <option value="">-- Select State/City --</option>
+            <option *ngFor="let state of availableStates" [value]="state">{{ state }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="hotel">Hotel:</label>
+          <select id="hotel" formControlName="hotel" (change)="updateHotelPrice()" class="form-control" [disabled]="!bookingForm.get('state')?.value">
+            <option value="">-- Select Hotel --</option>
+            <option *ngFor="let hotel of availableHotels" [value]="hotel">{{ hotel }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="checkInDate">Check-in Date:</label>
+          <input id="checkInDate" formControlName="checkInDate" type="date" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="checkOutDate">Check-out Date:</label>
+          <input id="checkOutDate" formControlName="checkOutDate" type="date" class="form-control" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="hotelPrice">Hotel Price:</label>
+        <input id="hotelPrice" type="text" [value]="hotelPrice" readonly class="form-control" />
+      </div>
+    </ng-container>
+
+    <!-- Holiday Fields -->
+    <ng-container *ngIf="selectedType === 'holiday'">
+      <div class="form-group">
+        <label for="holidayDestination">Destination:</label>
+        <select id="holidayDestination" formControlName="holidayDestination" (change)="updateHolidayPrice()" class="form-control" [disabled]="!bookingForm.get('country')?.value">
+          <option value="">-- Select Destination --</option>
+          <option *ngFor="let destination of holidayDestinations" [value]="destination">{{ destination }}</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="holidayStartDate">Start Date:</label>
+          <input id="holidayStartDate" formControlName="holidayStartDate" type="date" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label for="holidayEndDate">End Date:</label>
+          <input id="holidayEndDate" formControlName="holidayEndDate" type="date" class="form-control" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="holidayPrice">Tour Price:</label>
+        <input id="holidayPrice" type="text" [value]="holidayPrice" readonly class="form-control" />
+      </div>
+    </ng-container>
+
+    <!-- Date/Time Fields -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="pickupDate">Pickup Date:</label>
+        <input id="pickupDate" formControlName="pickupDate" type="date" class="form-control" />
+        <div *ngIf="bookingForm.get('pickupDate')?.invalid && bookingForm.get('pickupDate')?.touched" class="error-message">
+          Pickup date is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="pickupTime">Pickup Time:</label>
+        <input id="pickupTime" formControlName="pickupTime" type="time" class="form-control" />
+        <div *ngIf="bookingForm.get('pickupTime')?.invalid && bookingForm.get('pickupTime')?.touched" class="error-message">
+          Pickup time is required
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dropoffDate">Dropoff Date:</label>
+        <input id="dropoffDate" formControlName="dropoffDate" type="date" class="form-control" />
+        <div *ngIf="bookingForm.get('dropoffDate')?.invalid && bookingForm.get('dropoffDate')?.touched" class="error-message">
+          Dropoff date is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dropoffTime">Dropoff Time:</label>
+        <input id="dropoffTime" formControlName="dropoffTime" type="time" class="form-control" />
+        <div *ngIf="bookingForm.get('dropoffTime')?.invalid && bookingForm.get('dropoffTime')?.touched" class="error-message">
+          Dropoff time is required
+        </div>
+      </div>
+    </div>
+
+    <!-- Services -->
+    <div class="form-group">
+      <label>Services:</label>
+      <div class="checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" (change)="toggleService('Meal')" [checked]="selectedServices.includes('Meal')" />
+          <span>Meal</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" (change)="toggleService('Extra Baggage')" [checked]="selectedServices.includes('Extra Baggage')" />
+          <span>Extra Baggage</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" (change)="toggleService('Seat Selection')" [checked]="selectedServices.includes('Seat Selection')" />
+          <span>Seat Selection</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" (change)="toggleService('Insurance')" [checked]="selectedServices.includes('Insurance')" />
+          <span>Travel Insurance</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Form Buttons -->
+    <div class="form-buttons">
+      <button type="submit" class="btn btn-primary">{{ editing ? 'Update' : 'Save' }}</button>
+      <button type="button" class="btn btn-secondary" (click)="resetForm()" *ngIf="editing">Cancel</button>
+    </div>
+  </form>
+
+  <!-- Bookings Summary -->
+  <div class="summary-section">
+    <h2>Bookings Summary</h2>
+    <div class="summary-cards">
+      <div class="summary-card total">
+        <h3>Total</h3>
+        <p>{{ counts.total }}</p>
+      </div>
+      <div class="summary-card confirmed">
+        <h3>Confirmed</h3>
+        <p>{{ counts.confirmed }}</p>
+      </div>
+      <div class="summary-card waiting">
+        <h3>Waiting</h3>
+        <p>{{ counts.waiting }}</p>
+      </div>
+      <div class="summary-card cancelled">
+        <h3>Cancelled</h3>
+        <p>{{ counts.cancelled }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookings List -->
+  <div class="bookings-list">
+    <h2>Bookings List</h2>
+    <div class="booking-cards">
+      <div *ngFor="let booking of bookings; let i = index" class="booking-card" [class.confirmed]="booking.status === 'confirmed'"
+        [class.waiting]="booking.status === 'waiting'" [class.cancelled]="booking.status === 'cancelled'">
+        <div class="booking-header">
+          <h3>{{ booking.name }}</h3>
+          <span class="booking-type">{{ booking.type | titlecase }}</span>
+          <span class="booking-status">{{ booking.status | titlecase }}</span>
+        </div>
+        
+        <div class="booking-details">
+          <p><strong>Email:</strong> {{ booking.email }}</p>
+          <p><strong>Phone:</strong> {{ booking.phone }}</p>
+          <p><strong>DOB:</strong> {{ formatDate(booking.dob) }}</p>
+          
+          <ng-container *ngIf="booking.type === 'flight'">
+            <div class="flight-details">
+              <p><strong>From:</strong> {{ booking.country }} ({{ booking.state }})</p>
+              <p><strong>Airport:</strong> {{ booking.station }}</p>
+              <p><strong>Class:</strong> {{ booking.flightClass | titlecase }}</p>
+              <p><strong>Price:</strong> {{ booking.price }}</p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="booking.type === 'hotel'">
+            <div class="hotel-details">
+              <p><strong>Location:</strong> {{ booking.state }}, {{ booking.country }}</p>
+              <p><strong>Hotel:</strong> {{ booking.hotel }}</p>
+              <p><strong>Check-in:</strong> {{ formatDate(booking.checkInDate) }}</p>
+              <p><strong>Check-out:</strong> {{ formatDate(booking.checkOutDate) }}</p>
+              <p><strong>Price:</strong> {{ booking.price }}</p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="booking.type === 'holiday'">
+            <div class="holiday-details">
+              <p><strong>Destination:</strong> {{ booking.holidayDestination }}</p>
+              <p><strong>Country:</strong> {{ booking.country }}</p>
+              <p><strong>Start Date:</strong> {{ formatDate(booking.holidayStartDate) }}</p>
+              <p><strong>End Date:</strong> {{ formatDate(booking.holidayEndDate) }}</p>
+              <p><strong>Price:</strong> {{ booking.price }}</p>
+            </div>
+          </ng-container>
+
+          <div class="timing-details">
+            <p><strong>Pickup:</strong> {{ formatDate(booking.pickupDate) }} at {{ booking.pickupTime }}</p>
+            <p><strong>Dropoff:</strong> {{ formatDate(booking.dropoffDate) }} at {{ booking.dropoffTime }}</p>
+          </div>
+
+          <div *ngIf="booking.services && booking.services.length" class="services-details">
+            <p><strong>Services:</strong></p>
+            <ul>
+              <li *ngFor="let service of booking.services">{{ service }}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="booking-actions">
+          <button class="btn btn-edit" (click)="editBooking(booking)">Edit</button>
+          <button class="btn btn-delete" (click)="deleteBooking(i)">Delete</button>
+          <!-- <button class="btn btn-print" (click)="printPage()">Print</button> -->
+          <button class="btn btn-payment" style="background-color: green;" (click)="goToPayment(booking)">Payment</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

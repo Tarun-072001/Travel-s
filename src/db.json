@@ -1,0 +1,119 @@
+{
+  "users": [
+    {
+      "id": "f95d",
+      "fullName": "Kethan",
+      "fatherName": "asdfghjkl;",
+      "motherName": "zxcvbnm,",
+      "age": 11,
+      "gender": "Male",
+      "mobileNumber": "08790562584",
+      "email": "kethan@gmail.com",
+      "country": "India",
+      "state": "tG",
+      "mandal": "dcxzvbvn",
+      "pinCode": "50822",
+      "address": "xcsdfgbhjm",
+      "password": "12345",
+      "confirmPassword": "12345"
+    },
+    {
+      "id": "3db5",
+      "fullName": "Kethan",
+      "fatherName": "asdfghjkl;",
+      "motherName": "zxcvbnm,",
+      "age": 11,
+      "gender": "Male",
+      "mobileNumber": "08790562584",
+      "email": "kethan1@gmail.com",
+      "country": "India",
+      "state": "tG",
+      "mandal": "dcxzvbvn",
+      "pinCode": "50822",
+      "password": "12345",
+      "confirmPassword": "12345",
+      "address": "dfbghnj"
+    },
+    {
+      "id": "aec1",
+      "fullName": "Lakavath Tharun",
+      "mobileNumber": "07660938457",
+      "email": "tharunlakavath256@gmail.com",
+      "address": "Malkajgiri",
+      "country": "India",
+      "state": "Telangana",
+      "pinCode": "500047",
+      "fatherName": "asdfd",
+      "motherName": "asdfdg",
+      "age": 22,
+      "gender": "Male",
+      "mandal": "ssdfdg",
+      "password": "12341234",
+      "confirmPassword": "12341234"
+    },
+    {
+      "id": "29b4",
+      "fullName": "sadfghj",
+      "fatherName": "sdfb",
+      "motherName": "dfdg",
+      "age": 22,
+      "gender": "Male",
+      "mobileNumber": "1234567890",
+      "email": "lakavath@gmail.com",
+      "address": "dsfdgfb",
+      "country": "dvsvs",
+      "state": "cxvsb",
+      "mandal": "ccdd",
+      "pinCode": "wfsdv",
+      "password": "1111",
+      "confirmPassword": "1111"
+    },
+    {
+      "id": "2fa0",
+      "fullName": "asdfgbhnj",
+      "fatherName": "sdfghjh",
+      "motherName": "sdfghj",
+      "age": 22,
+      "gender": "Male",
+      "mobileNumber": "1234567890",
+      "email": "a@gmail.com",
+      "address": "asdfgfnhj",
+      "country": "fsaf",
+      "state": "dfesf",
+      "mandal": "xzewg",
+      "pinCode": "11223",
+      "password": "112233",
+      "confirmPassword": "112233"
+    },
+    {
+      "id": "9944",
+      "fullName": "lakavath",
+      "fatherName": "Tharun",
+      "motherName": "MAllesh",
+      "age": 23,
+      "gender": "Male",
+      "mobileNumber": "8790532534",
+      "email": "tharun1@gmail.com",
+      "address": "sdnbvjhwu",
+      "country": "India",
+      "state": "TG",
+      "mandal": "TTG",
+      "pinCode": "50288",
+      "password": "1234",
+      "confirmPassword": "1234"
+    }
+  ],
+  "loginData": [
+    {
+      "id": "f332",
+      "email": "kethan@gmail.com",
+      "password": "12345"
+    },
+    {
+      "id": "23b8",
+      "email": "lakavath@gmail.com",
+      "password": "1111"
+    }
+  ],
+  "bookings": []
+}

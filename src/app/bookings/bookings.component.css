@@ -1,0 +1,57 @@
+/* General Styles */
+.container {
+  max-width: 600px; /* Limits the form width */
+}
+
+h2 {
+  font-size: 24px;
+  color: #2C3E50;
+  font-weight: 600;
+}
+
+/* Form Styles */
+.card {
+  background-color: #f8f9fa; /* Light background for the form */
+  border: 1px solid #ddd;
+}
+
+.form-control,
+.form-select {
+  border-radius: 8px; /* Rounded corners for inputs */
+}
+
+button.btn {
+  border-radius: 8px; /* Rounded button */
+  font-weight: bold;
+}
+
+/* Booking List */
+.booking-item {
+  max-width: 600px;
+  margin: auto;
+}
+
+.card p {
+  color: #333;
+  font-weight: 600;
+}
+
+.card .d-flex {
+  justify-content: space-between;
+}
+
+.card .btn-sm {
+  padding: 0.5rem 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}

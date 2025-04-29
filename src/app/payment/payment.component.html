@@ -1,0 +1,79 @@
+<div class="payment-container" *ngIf="bookingData">
+    <h2 class="heading">Payment for {{ bookingData.name }}</h2>
+  
+    <div class="info-grid">
+      <div><strong>Type:</strong> {{ bookingData.type | titlecase }}</div>
+      <div><strong>Email:</strong> {{ bookingData.email }}</div>
+      <div><strong>Phone:</strong> {{ bookingData.phone }}</div>
+      <div><strong>Amount:</strong> {{ bookingData.price }}</div>
+    </div>
+  
+    <div class="section" *ngIf="bookingData.type === 'flight'">
+      <h3>Flight Details</h3>
+      <p><strong>Station:</strong> {{ bookingData.station }}</p>
+      <p><strong>Class:</strong> {{ bookingData.flightClass }}</p>
+    </div>
+  
+    <div class="section" *ngIf="bookingData.type === 'hotel'">
+      <h3>Hotel Details</h3>
+      <p><strong>Hotel:</strong> {{ bookingData.hotel }}</p>
+      <p><strong>Check-in:</strong> {{ bookingData.checkInDate }}</p>
+      <p><strong>Check-out:</strong> {{ bookingData.checkOutDate }}</p>
+    </div>
+  
+    <div class="section" *ngIf="bookingData.type === 'holiday'">
+      <h3>Holiday Package</h3>
+      <p><strong>Destination:</strong> {{ bookingData.holidayDestination }}</p>
+      <p><strong>Start Date:</strong> {{ bookingData.holidayStartDate }}</p>
+      <p><strong>End Date:</strong> {{ bookingData.holidayEndDate }}</p>
+    </div>
+  
+    <div class="section">
+      <h3>Travel Timing</h3>
+      <p><strong>Pickup:</strong> {{ bookingData.pickupDate }} {{ bookingData.pickupTime }}</p>
+      <p><strong>Dropoff:</strong> {{ bookingData.dropoffDate }} {{ bookingData.dropoffTime }}</p>
+    </div>
+  
+    <div class="section" *ngIf="bookingData.services?.length">
+      <h3>Selected Services</h3>
+      <ul>
+        <li *ngFor="let service of bookingData.services">{{ service }}</li>
+      </ul>
+    </div>
+  
+    <!-- Payment Method Tabs -->
+    <div class="tab-buttons">
+      <button [class.active]="selectedMethod === 'card'" (click)="selectedMethod = 'card'">💳 Card</button>
+      <button [class.active]="selectedMethod === 'upi'" (click)="selectedMethod = 'upi'">📱 UPI</button>
+      <button [class.active]="selectedMethod === 'qr'" (click)="selectedMethod = 'qr'">📷 QR Code</button>
+    </div>
+  
+    <!-- Card Form -->
+    <div class="payment-box" *ngIf="selectedMethod === 'card'">
+      <input type="text" placeholder="Card Number" />
+      <input type="text" placeholder="MM/YY" />
+      <input type="text" placeholder="CVV" />
+      <button class="pay-btn">Pay Now</button>
+    </div>
+  
+    <!-- UPI Form -->
+    <div class="payment-box" *ngIf="selectedMethod === 'upi'">
+      <input type="text" placeholder="example@upi" />
+      <button class="pay-btn">Pay via UPI</button>
+    </div>
+  
+    <!-- QR Code -->
+    <div class="qr-box" *ngIf="selectedMethod === 'qr'">
+      <p>Scan this QR with your UPI app</p>
+      <img
+        src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=merchant@upi&pn=MerchantName&am={{ bookingData.price }}"
+        alt="QR Code"
+      />
+    </div>
+  
+    <!-- Print Button -->
+    <div class="print-btn-wrapper">
+      <button class="print-btn" (click)="printPage()">🖨️ Print Receipt</button>
+    </div>
+  </div>
+  
